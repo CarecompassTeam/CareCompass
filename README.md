@@ -32,7 +32,7 @@ CareCompass/
 | Mohamed Sameh | Networking, security, cloud infrastructure, and infrastructure support |
 | Yousab | Node.js backend development |
 | Dina | React frontend and AI integration |
-| Lisa | Node.js backend, AI integration, and machine learning |
+| Liza | Node.js backend, AI integration, and machine learning |
 
 Team members may collaborate across modules when integration or testing requires it. Final task assignments should be agreed upon by the team.
 
