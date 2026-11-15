@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { DB_URI } from "./../config.js";
 import { connectRedis } from "./redis.connection.js";
+import { UserModel } from "./model/user.model.js";
 
 export const bootstrapDB = async (app, port) => {
   try {

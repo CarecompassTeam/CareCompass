@@ -25,31 +25,38 @@ const userSchema = new mongoose.Schema(
         return this.provider == ProviderEnum.SYSTEM
       },
     },
-    phone: String,
-    DOB: Date,
+    phone: {
+      type: String,
+      required:true
+    },
     confirmEmail: Date,
     image: String,
-    coverImage: [String],
-    gender: {
-      type: Number,
-      enum: Object.values(GenderEnum),
-      default: GenderEnum.MALE,
-    },
     role: {
       type: Number,
       enum: Object.values(RoleEnum),
-      default: RoleEnum.USER,
+      default: RoleEnum.PATIENT,
     },
     provider: {
       type: Number,
       enum: Object.values(ProviderEnum),
       default: ProviderEnum.SYSTEM,
     },
-    changeCredentialsTime:Date
+    changeCredentialsTime:Date,
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
-    // collection:lw 3ayez a3'ayar el esm
     strict: false,
     validateBeforeSave: true,
     strictQuery: true,
@@ -69,4 +76,4 @@ userSchema
     return `${this.firstName} ${this.lastName}`;
   });
 
-export const UserModel = mongoose.model("User", userSchema);
+export const UserModel = mongoose.models.user || mongoose.model("User", userSchema);
