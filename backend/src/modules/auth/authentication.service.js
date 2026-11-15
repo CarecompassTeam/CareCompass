@@ -112,7 +112,7 @@ export const signupWithGmail = async ({ idToken}, issuer ) => {
   });
   return {
     status: 201,
-    data: await createLoginCredentials({ user: existAccount, issuer }),
+    data: await createLoginCredentials({ user, issuer }),
   };
 };
 
