@@ -25,9 +25,14 @@ const userSchema = new mongoose.Schema(
         return this.provider == ProviderEnum.SYSTEM
       },
     },
-    phone: {
+     gender: {
+            type: Number,
+            enum: Object.values(GenderEnum),
+            default: GenderEnum.MALE,
+          },
+           phone: {
       type: String,
-      required:true
+      required: true,
     },
     confirmEmail: Date,
     image: String,

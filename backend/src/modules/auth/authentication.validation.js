@@ -31,7 +31,7 @@ export const signup = (lang) => {
         phone: generalValidationFields.phone(lang),
         confirmPassword: generalValidationFields.confirmPassword(lang),
         confirmEmail: generalValidationFields.email(lang),
-        role: z.enum(RoleEnum),
+        role: z.enum(RoleEnum).optional().default(RoleEnum.PATIENT),
         gender: generalValidationFields.gender(lang),
       })
       .superRefine((data, ctx) => {
