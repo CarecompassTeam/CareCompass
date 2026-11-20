@@ -27,6 +27,9 @@ CareCompass/
 - Landing page built with Navbar, Hero, How it works, Features, Contact, and Footer sections
 - Contact form with loading, success, and error states (connects to `POST /api/contact`)
 - Responsive layout with shared design tokens in `styles.css`
+- Frontend auth state: API service layer (`api.js`), token handling in `localStorage`, route guards (`ProtectedRoute`), and logout
+- Login page with client-side validation, loading state, and server error messages
+- Forgot password page (`/forgot-password`) with a link from the login page (backend endpoints pending)
 
 ### Run the frontend locally
 

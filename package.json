@@ -2,5 +2,9 @@
   "name": "carecompass",
   "version": "1.0.0",
   "private": true,
-  "description": "CareCompass AI Healthcare Companion graduation project"
+  "description": "CareCompass AI Healthcare Companion graduation project",
+  "dependencies": {
+    "axios": "^1.21.1",
+    "react-router-dom": "^7.18.6"
+  }
 }
