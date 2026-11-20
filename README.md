@@ -22,6 +22,17 @@ CareCompass/
 ├── package.json
 └── README.md
 ```
+## Frontend Progress
+
+- Landing page built with Navbar, Hero, How it works, Features, Contact, and Footer sections
+- Contact form with loading, success, and error states (connects to `POST /api/contact`)
+- Responsive layout with shared design tokens in `styles.css`
+
+### Run the frontend locally
+
+    cd frontend
+    npm install
+    npm run dev
 
 ## Team Responsibilities
 
