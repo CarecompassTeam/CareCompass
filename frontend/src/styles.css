@@ -6,6 +6,7 @@ h1,h2,h3,.logo { font-family:"Lora",serif; }
 .navbar nav { display:flex; gap:1.25rem; }
 .btn { background:var(--teal); color:#fff; padding:.7rem 1.2rem; border-radius:999px; font:inherit; font-weight:600; display:inline-block; border:none; cursor:pointer; }
 .btn:hover { opacity:.9; }
+.btn { background:var(--teal); color:#fff; padding:.7rem 1.2rem; border-radius:999px; font-weight:600; display:inline-block; }
 .hero { padding:4rem 1.5rem; max-width:760px; margin:auto; text-align:center; }
 .hero h1 { font-size:clamp(2rem,6vw,3.5rem); line-height:1.15; }
 .section { padding:3rem 1.5rem; max-width:1100px; margin:auto; }
@@ -141,3 +142,4 @@ h1,h2,h3,.logo { font-family:"Lora",serif; }
   text-decoration: none;
 }
 .forgot-link:hover { text-decoration: underline; }
+#contact .msg--error { background: #fde8e8; color: #b42318; }
