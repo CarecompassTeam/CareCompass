@@ -30,6 +30,12 @@ CareCompass/
 - Frontend auth state: API service layer (`api.js`), token handling in `localStorage`, route guards (`ProtectedRoute`), and logout
 - Login page with client-side validation, loading state, and server error messages
 - Forgot password page (`/forgot-password`) with a link from the login page (backend endpoints pending)
+### Doctor Dashboard (`/doctor`)
+- Doctor profile card (name, specialty, patient count)
+- Patient list with live search by name
+- Patient details card (age, condition, last visit)
+- Uses mock data for now (`patients` array in `DoctorDashboard.jsx`); to be replaced with API data later
+- Styles in `src/doctor.css` 
 
 ### Run the frontend locally
 

@@ -1,4 +1,5 @@
 ﻿import { Routes, Route, useNavigate } from "react-router-dom";
+import DoctorDashboard from "./pages/DoctorDashboard";
 import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./ProtectedRoute";
@@ -46,6 +47,7 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/doctor" element={<DoctorDashboard />} />
       <Route
         path="/dashboard"
         element={
