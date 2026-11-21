@@ -15,50 +15,15 @@ import {
   CheckCircle2,
   ArrowLeft,
   X,
+  WifiOff,
 } from "lucide-react";
 import "./SignInDialog.css";
 
+import { DEMO_ACCOUNTS } from "../../services/auth";
+import { useAuth } from "../../hooks/use-auth";
+
 const DISCLAIMER =
   "Information assistant. Not a diagnosis. The doctor decides.";
-
-const DEMO_ACCOUNTS = [
-  {
-    email: "doctor@carecompass.app",
-    password: "demo1234",
-    role: "doctor",
-    name: "Dr. Hana Kamal",
-    redirect: "/doctor/patients",
-  },
-  {
-    email: "patient@carecompass.app",
-    password: "demo1234",
-    role: "patient",
-    name: "Mariam R.",
-    redirect: "/patient/home",
-  },
-  {
-    email: "admin@carecompass.app",
-    password: "demo1234",
-    role: "admin",
-    name: "Admin",
-    redirect: "/admin/users",
-  },
-  {
-    email: "disabled@carecompass.app",
-    password: "demo1234",
-    role: "doctor",
-    name: "Dr. Mariam Adel",
-    redirect: "",
-    disabled: true,
-  },
-  {
-    email: "doctor2@carecompass.app",
-    password: "demo1234",
-    role: "doctor",
-    name: "Dr. Omar Saleh",
-    redirect: "/doctor/patients",
-  },
-];
 
 const ROLE_META = {
   doctor: {
@@ -81,8 +46,7 @@ const ROLE_META = {
 export function SignInDialog({
   open,
   onOpenChange,
-  onDoctorSignIn,
-  onPatientSignIn,
+  onSignedIn,
   onRequestAccess,
 }) {
   useEffect(() => {
@@ -166,8 +130,7 @@ export function SignInDialog({
           <SignInForm
             key="signin-form"
             onClose={() => onOpenChange(false)}
-            onDoctorSignIn={onDoctorSignIn}
-            onPatientSignIn={onPatientSignIn}
+            onSignedIn={onSignedIn}
             onRequestAccess={onRequestAccess}
           />
         </div>
@@ -176,7 +139,8 @@ export function SignInDialog({
   );
 }
 
-function SignInForm({ onClose, onDoctorSignIn, onPatientSignIn, onRequestAccess }) {
+function SignInForm({ onClose, onSignedIn, onRequestAccess }) {
+  const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -223,7 +187,7 @@ function SignInForm({ onClose, onDoctorSignIn, onPatientSignIn, onRequestAccess 
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (status === "loading") return;
@@ -241,48 +205,36 @@ function SignInForm({ onClose, onDoctorSignIn, onPatientSignIn, onRequestAccess 
     setError("");
     setNotice("");
 
-    setTimeout(() => {
-      const match = DEMO_ACCOUNTS.find(
-        (account) =>
-          account.email.toLowerCase() === email.trim().toLowerCase() &&
-          account.password === password
-      );
-
-      if (!match) {
-        setStatus("error");
-        setError("Email or password is incorrect.");
-        return;
-      }
-
-      if (match.disabled) {
-        setStatus("disabled");
-        setError(
-          "This account has been disabled. Please contact your administrator."
-        );
-        return;
-      }
+    /* Real backend first (POST /api/auth/signin) — the bundled demo
+       accounts are used only when the backend cannot be reached. */
+    try {
+      const result = await signIn(email, password, { remember });
 
       setStatus("success");
       setSuccess({
-        name: match.name,
-        role: match.role,
-        redirect: match.redirect,
+        name: result.name,
+        role: String(result.role || "").toLowerCase(),
+        redirect: result.redirect,
+        demo: result.demo,
       });
 
-      setNotice(`Welcome back, ${match.name}`);
+      setNotice(`Welcome back, ${result.name}`);
 
-      if (match.role === "doctor" && onDoctorSignIn) {
-        setTimeout(
-          () => onDoctorSignIn(match.email, match.name),
-          1800
-        );
-      } else if (match.role === "patient" && onPatientSignIn) {
-        setTimeout(
-          () => onPatientSignIn(match.email, match.name),
-          1800
-        );
+      setTimeout(() => {
+        if (typeof onSignedIn === "function") onSignedIn(result);
+      }, 1800);
+    } catch (submitError) {
+      if (submitError?.code === "ACCOUNT_DISABLED") {
+        setStatus("disabled");
+      } else {
+        setStatus("error");
       }
-    }, 1300);
+
+      setError(
+        submitError?.message ||
+          "Something went wrong. Please try again."
+      );
+    }
   };
 
   const handleDemoAccount = (account) => {
@@ -532,7 +484,7 @@ function SignInForm({ onClose, onDoctorSignIn, onPatientSignIn, onRequestAccess 
 }
 
 function SuccessView({ success, onClose }) {
-  const meta = ROLE_META[success.role];
+  const meta = ROLE_META[success.role] || ROLE_META.patient;
   const Icon = meta.icon;
 
   return (
@@ -547,6 +499,13 @@ function SuccessView({ success, onClose }) {
       </div>
 
       <h2>Welcome back, {success.name}</h2>
+
+      {success.demo && (
+        <p className="signin-demo-mode-note">
+          <WifiOff size={13} />
+          Backend not reachable — signed in to the bundled demo data.
+        </p>
+      )}
 
       <p>
         Redirecting you to{" "}

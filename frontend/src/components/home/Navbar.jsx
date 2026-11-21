@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { href: "#assistant", label: "The Assistant" },
   { href: "#verification", label: "Verification" },
   { href: "#ratings", label: "Doctor Ratings" },
-  { href: "#design", label: "Design" },
+  { href: "#contact", label: "Contact" },
 ];
 
 export default function Navbar({ onSignIn, onSignUp }) {

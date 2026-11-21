@@ -1,29 +1,33 @@
 import { useEffect, useState } from "react";
+import { LogOut, ShieldAlert } from "lucide-react";
+
 import Navbar from "./components/home/Navbar";
 import Hero from "./components/home/Hero";
+import HowItWorks from "./components/home/HowItWorks";
+import Features from "./components/home/Features";
+import CallToAction from "./components/home/CallToAction";
+import ContactSection from "./components/home/ContactSection";
 import SiteFooter from "./components/home/SiteFooter";
 import { SignInDialog } from "./components/auth/SignInDialog";
 import { SignUpDialog } from "./components/auth/SignUpDialog";
 import { DoctorWorkspace } from "./components/doctor/DoctorWorkspace";
 import { PatientWorkspace } from "./components/patient/PatientWorkspace";
 import { Toaster } from "./components/ui/Toaster";
+import { AuthProvider, useAuth, RequireAuth } from "./hooks/use-auth";
 
 export default function App() {
-  const [apiStatus, setApiStatus] = useState("Checking backend...");
+  return (
+    <AuthProvider>
+      <AppShell />
+    </AuthProvider>
+  );
+}
+
+function AppShell() {
+  const { session, user, isAuthed, logout } = useAuth();
   const [signInOpen, setSignInOpen] = useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);
-  const [doctorSession, setDoctorSession] = useState(null);
-  const [patientSession, setPatientSession] = useState(null);
-
-  const handleDoctorSignIn = (email, name) => {
-    setSignInOpen(false);
-    setDoctorSession({ email, name });
-  };
-
-  const handlePatientSignIn = (email, name) => {
-    setSignInOpen(false);
-    setPatientSession({ email, name });
-  };
+  const [apiStatus, setApiStatus] = useState("Checking backend...");
 
   useEffect(() => {
     fetch("/api/health")
@@ -44,35 +48,54 @@ export default function App() {
       });
   }, []);
 
-  if (patientSession) {
+  /* ── Protected views — session role decides what renders.
+     Route guard: each area is wrapped in <RequireAuth role=…>, so a
+     session with the wrong role never reaches the dashboard. ── */
+
+  if (isAuthed && user?.role === "doctor") {
     return (
       <>
-        <PatientWorkspace
-          patient={{ name: patientSession.name, email: patientSession.email }}
-          onSignOut={() => setPatientSession(null)}
-        />
+        <RequireAuth role="doctor">
+          <DoctorWorkspace
+            doctor={{
+              name: user.name,
+              specialty: "Internal Medicine",
+              rating: 4.9,
+              ratings: 128,
+            }}
+            onSignOut={logout}
+          />
+        </RequireAuth>
         <Toaster />
       </>
     );
   }
 
-  if (doctorSession) {
+  if (isAuthed && user?.role === "patient") {
+    /* Patient dashboard: replace <PatientWorkspaceSlot /> with your own
+       dashboard component (session + logout are ready in useAuth()). */
     return (
       <>
-        <DoctorWorkspace
-          doctor={{
-            name: doctorSession.name,
-            specialty: "Internal Medicine",
-            rating: 4.9,
-            ratings: 128,
-          }}
-          onSignOut={() => setDoctorSession(null)}
-        />
+       <RequireAuth role="patient">
+  <PatientWorkspace user={user} onSignOut={logout} />
+</RequireAuth>
         <Toaster />
       </>
     );
   }
 
+  if (isAuthed && user?.role === "admin") {
+    return (
+      <>
+        <RequireAuth role="admin">
+          <AdminPlaceholder onSignOut={logout} />
+        </RequireAuth>
+        <Toaster />
+      </>
+    );
+  }
+
+  /* ── Public landing page ── */
   return (
     <>
       <Navbar
@@ -80,13 +103,19 @@ export default function App() {
         onSignUp={() => setSignUpOpen(true)}
       />
       <Hero />
+      <HowItWorks />
+      <Features />
+      <CallToAction
+        onSignIn={() => setSignInOpen(true)}
+        onSignUp={() => setSignUpOpen(true)}
+      />
+      <ContactSection />
       <SiteFooter />
 
       <SignInDialog
         open={signInOpen}
         onOpenChange={setSignInOpen}
-        onDoctorSignIn={handleDoctorSignIn}
-        onPatientSignIn={handlePatientSignIn}
+        onSignedIn={() => setSignInOpen(false)}
         onRequestAccess={() => {
           setSignInOpen(false);
           setSignUpOpen(true);
@@ -103,5 +132,26 @@ export default function App() {
 
       <Toaster />
     </>
+  );
+}
+
+/* Admin dashboard is not in this sprint — keep the session clean. */
+function AdminPlaceholder({ onSignOut }) {
+  return (
+    <div className="auth-guard-card">
+      <span className="auth-guard-icon denied">
+        <ShieldAlert size={22} />
+      </span>
+      <h2>Admin area</h2>
+      <p>
+        You are signed in as admin. The admin verification dashboard is not
+        part of this frontend build yet.
+      </p>
+
+      <button type="button" className="patient-slot-logout" onClick={onSignOut}>
+        <LogOut size={15} />
+        Sign out
+      </button>
+    </div>
   );
 }
