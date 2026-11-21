@@ -1,7 +1,26 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Navbar from "./components/home/Navbar";
+import Hero from "./components/home/Hero";
+import SiteFooter from "./components/home/SiteFooter";
+import { SignInDialog } from "./components/auth/SignInDialog";
+import { SignUpDialog } from "./components/auth/SignUpDialog";
+import { DoctorWorkspace } from "./components/doctor/DoctorWorkspace";
+import { Toaster } from "./components/ui/Toaster";
 
 export default function App() {
   const [apiStatus, setApiStatus] = useState("Checking backend...");
+  const [signInOpen, setSignInOpen] = useState(false);
+  const [signUpOpen, setSignUpOpen] = useState(false);
+  const [doctorSession, setDoctorSession] = useState(null);
+
+  const handleDoctorSignIn = (email, name) => {
+    setSignInOpen(false);
+    setDoctorSession({ email, name });
+  };
+
+  const handlePatientSignIn = (email, name) => {
+    console.log("Patient signed in:", email, name);
+  };
 
   useEffect(() => {
     fetch("/api/health")
@@ -9,30 +28,65 @@ export default function App() {
         if (!response.ok) {
           throw new Error("Backend request failed");
         }
+
         return response.json();
       })
       .then((data) => {
-        setApiStatus(data.status === "ok" ? "Connected" : "Unexpected response");
+        setApiStatus(
+          data.status === "ok" ? "Connected" : "Unexpected response"
+        );
       })
       .catch(() => {
         setApiStatus("Not connected");
       });
   }, []);
 
+  if (doctorSession) {
+    return (
+      <>
+        <DoctorWorkspace
+          doctor={{
+            name: doctorSession.name,
+            specialty: "Internal Medicine",
+            rating: 4.9,
+            ratings: 128,
+          }}
+          onSignOut={() => setDoctorSession(null)}
+        />
+        <Toaster />
+      </>
+    );
+  }
+
   return (
-    <main style={{
-      maxWidth: "720px",
-      margin: "80px auto",
-      padding: "24px",
-      fontFamily: "Arial, sans-serif",
-      lineHeight: 1.6
-    }}>
-      <h1>CareCompass</h1>
-      <p>AI Healthcare Companion</p>
-      <hr />
-      <h2>Development Status</h2>
-      <p>Backend: <strong>{apiStatus}</strong></p>
-      <p>Initial project setup is ready for development.</p>
-    </main>
+    <>
+      <Navbar
+        onSignIn={() => setSignInOpen(true)}
+        onSignUp={() => setSignUpOpen(true)}
+      />
+      <Hero />
+      <SiteFooter />
+
+      <SignInDialog
+        open={signInOpen}
+        onOpenChange={setSignInOpen}
+        onDoctorSignIn={handleDoctorSignIn}
+        onPatientSignIn={handlePatientSignIn}
+        onRequestAccess={() => {
+          setSignInOpen(false);
+          setSignUpOpen(true);
+        }}
+      />
+      <SignUpDialog
+        open={signUpOpen}
+        onOpenChange={setSignUpOpen}
+        onBackToSignIn={() => {
+          setSignUpOpen(false);
+          setSignInOpen(true);
+        }}
+      />
+
+      <Toaster />
+    </>
   );
 }

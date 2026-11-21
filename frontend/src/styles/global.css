@@ -1,0 +1,279 @@
+
+/* =====================================
+   CareCompass - Global Styles
+   Converted from original z.ai globals.css
+===================================== */
+
+/* Original project fonts: DM Sans, Fraunces, Geist Mono */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+
+/* =====================================
+   1. Brand Colors & Variables
+===================================== */
+
+:root {
+  color-scheme: light only;
+
+  --radius: 0.75rem;
+
+  /* CareCompass brand palette */
+  --background: oklch(0.985 0.004 165);
+  --foreground: oklch(0.27 0.02 195);
+  --ink: oklch(0.27 0.02 195);
+
+  --card: #ffffff;
+  --card-foreground: oklch(0.27 0.02 195);
+
+  --popover: #ffffff;
+  --popover-foreground: oklch(0.27 0.02 195);
+
+  --primary: oklch(0.45 0.09 195);
+  --primary-foreground: oklch(0.985 0.004 165);
+
+  --teal: oklch(0.45 0.09 195);
+  --teal-soft: oklch(0.93 0.03 170);
+
+  --secondary: oklch(0.93 0.03 170);
+  --secondary-foreground: oklch(0.35 0.04 195);
+
+  --muted: oklch(0.96 0.006 165);
+  --muted-foreground: oklch(0.5 0.02 190);
+
+  --accent: oklch(0.93 0.03 170);
+  --accent-foreground: oklch(0.35 0.04 195);
+
+  --sage: oklch(0.55 0.06 150);
+  --sand: oklch(0.95 0.02 80);
+  --clay: oklch(0.7 0.08 55);
+
+  --destructive: oklch(0.58 0.18 25);
+
+  --border: oklch(0.9 0.01 175);
+  --input: oklch(0.9 0.01 175);
+  --ring: oklch(0.45 0.09 195);
+
+  /* Fonts */
+  --font-sans: "DM Sans", sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-mono: "Geist Mono", monospace;
+}
+
+
+/* =====================================
+   2. Base Styles
+===================================== */
+
+* {
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--background);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  background-color: var(--background);
+  color: var(--foreground);
+
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "ss02", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background-color: #0064652e;
+  color: var(--ink);
+}
+
+
+/* =====================================
+   3. Typography Utilities
+===================================== */
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+
+/* =====================================
+   4. Visual Utilities
+===================================== */
+
+/* Subtle paper grain texture */
+
+.grain {
+  position: relative;
+}
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  mix-blend-mode: multiply;
+}
+
+/* Hand-drawn underline accent */
+
+.ink-underline {
+  background-image: linear-gradient(
+    transparent 62%,
+    oklch(0.7 0.08 55 / 0.35) 0
+  );
+
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding-bottom: 0.05em;
+}
+
+/* Soft elevated card */
+
+.paper-card {
+  background: var(--card);
+
+  box-shadow:
+    0 1px 2px oklch(0.27 0.02 195 / 0.04),
+    0 8px 24px -12px oklch(0.27 0.02 195 / 0.08);
+}
+
+/* Dotted route line */
+
+.dotted-route {
+  background-image: radial-gradient(
+    circle,
+    oklch(0.5 0.06 175 / 0.4) 1px,
+    transparent 1.5px
+  );
+
+  background-size: 8px 8px;
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+
+/* =====================================
+   5. Custom Scrollbar
+===================================== */
+
+.scrollbar-rivara::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-rivara::-webkit-scrollbar-thumb {
+  background: oklch(0.7 0.05 175 / 0.5);
+  border-radius: 999px;
+}
+
+.scrollbar-rivara::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+/* =====================================
+   6. Animations
+===================================== */
+
+/* Trust strip marquee */
+
+@keyframes rivara-marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: rivara-marquee 38s linear infinite;
+}
+
+
+/* Floating hero cards */
+
+@keyframes rivara-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.float-slow {
+  animation: rivara-float 6s ease-in-out infinite;
+}
+
+.float-slower {
+  animation: rivara-float 8s ease-in-out infinite;
+}
+
+
+/* Star rating animation */
+
+@keyframes star-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.star-pop {
+  animation: star-pop 0.5s ease-out both;
+}
