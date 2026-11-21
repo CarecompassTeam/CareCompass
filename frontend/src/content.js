@@ -6,7 +6,6 @@ export const nav = [
   { label: "Features", href: "#features"
     
    },
-   { label: "Contact", href: "#contact" },
 ];
 export const hero = {
   title: "Your records, explained. Your doctor, in charge.",
