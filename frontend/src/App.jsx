@@ -77,7 +77,7 @@ function AppShell() {
     return (
       <>
        <RequireAuth role="patient">
-  <PatientWorkspace user={user} onSignOut={logout} />
+        <PatientWorkspace patient={user} onSignOut={logout} />
 </RequireAuth>
         <Toaster />
       </>

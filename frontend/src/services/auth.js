@@ -230,9 +230,15 @@ export async function signIn(email, password, { remember = true } = {}) {
 
     result = { ...data, demo: false };
   } catch (error) {
-    /* Only fall back when the backend is unreachable — real 401/403
-       responses must surface to the user as-is. */
-    if (error?.name === "TypeError") {
+    /* Fall back to the demo accounts when the backend is unreachable
+       (network error) or broken (5xx / 404). Real 401/403 responses
+       (wrong password, disabled account) still surface as-is. */
+    const backendDown =
+      error?.name === "TypeError" ||
+      error?.status >= 500 ||
+      error?.status === 404;
+
+    if (backendDown) {
       result = demoSignIn(email, password);
     } else {
       throw error;

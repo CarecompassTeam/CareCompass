@@ -224,6 +224,7 @@ function SignInForm({ onClose, onSignedIn, onRequestAccess }) {
         if (typeof onSignedIn === "function") onSignedIn(result);
       }, 1800);
     } catch (submitError) {
+       console.error("Sign in failed:", submitError);
       if (submitError?.code === "ACCOUNT_DISABLED") {
         setStatus("disabled");
       } else {
