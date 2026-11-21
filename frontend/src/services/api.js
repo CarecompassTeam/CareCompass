@@ -195,6 +195,66 @@ export async function api(path, options = {}) {
     };
   }
 
+  /* ── Patient endpoints ───────────────────────────────────────────
+     The signed-in patient is Mariam R. (the first MOCK_PATIENTS row),
+     so her seeded history is the default. Saves are persisted to
+     localStorage so the patient can reload and still see their edits —
+     exactly what the workspace's real /api/patient/history would do.
+  ─────────────────────────────────────────────────────────────────── */
+  const PATIENT_KEY = MOCK_PATIENTS[0].id;
+  const LS_KEY = `cc_patient_history_${PATIENT_KEY}`;
+
+  function readPatientHistory() {
+    const seedHit = MOCK_HISTORIES[PATIENT_KEY];
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        return { history: parsed.history, updatedAt: parsed.updatedAt };
+      }
+    } catch {
+      /* fall through to seed */
+    }
+    return { history: seedHit.history, updatedAt: seedHit.updatedAt };
+  }
+
+  /* GET /api/patient/history — the signed-in patient's own history */
+  if (path === "/api/patient/history" && method === "GET") {
+    return readPatientHistory();
+  }
+
+  /* PUT /api/patient/history — validate + persist the patient's edits */
+  if (path === "/api/patient/history" && method === "PUT") {
+    let body = {};
+    try {
+      body = options.body ? JSON.parse(options.body) : {};
+    } catch {
+      throw httpError(400, "Invalid history payload.");
+    }
+    const { personal } = body;
+    const fields = {};
+    if (personal) {
+      if (personal.age && (Number.isNaN(Number(personal.age)) || Number(personal.age) < 0 || Number(personal.age) > 130))
+        fields.age = "Age must be between 0 and 130.";
+      if (personal.heightCm && (Number.isNaN(Number(personal.heightCm)) || Number(personal.heightCm) < 20 || Number(personal.heightCm) > 300))
+        fields.heightCm = "Height must be between 20 and 300 cm.";
+      if (personal.weightKg && (Number.isNaN(Number(personal.weightKg)) || Number(personal.weightKg) < 1 || Number(personal.weightKg) > 500))
+        fields.weightKg = "Weight must be between 1 and 500 kg.";
+    }
+    if (Object.keys(fields).length) {
+      const err = httpError(422, "Some entries need a valid value before saving.");
+      err.fields = fields;
+      throw err;
+    }
+    const updatedAt = new Date().toISOString();
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify({ history: body, updatedAt }));
+    } catch {
+      /* ignore quota errors in the demo */
+    }
+    return { history: body, updatedAt };
+  }
+
   /* Unknown route — behave like a 404 from a real backend. */
   throw httpError(404, `No mock handler for ${method} ${path}`);
 }

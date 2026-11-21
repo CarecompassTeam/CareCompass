@@ -1,0 +1,140 @@
+/* =====================================
+   Button — plain-CSS port of shadcn/ui Button
+   Values mirror the workspace button.tsx (New York style)
+===================================== */
+
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  border: 0;
+  border-radius: var(--radius-md, 10px);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.25;
+  font-weight: 500;
+
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.ui-btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Icon sizing inside buttons ([&_svg]:size-4, shrink-0) */
+.ui-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.ui-btn:focus-visible {
+  border-color: var(--ring, var(--primary));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring, var(--primary)) 50%, transparent);
+}
+
+/* ── Variants ─────────────────────────────────────────────── */
+
+.ui-btn-default {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.06);
+}
+
+.ui-btn-default:hover {
+  background: color-mix(in oklab, var(--primary) 90%, transparent);
+}
+
+.ui-btn-destructive {
+  background: var(--destructive);
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.06);
+}
+
+.ui-btn-destructive:hover {
+  background: color-mix(in oklab, var(--destructive) 90%, transparent);
+}
+
+.ui-btn-destructive:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--destructive) 20%, transparent);
+}
+
+.ui-btn-outline {
+  background: var(--background);
+  border: 1px solid var(--border);
+  color: var(--foreground, var(--ink));
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.06);
+}
+
+.ui-btn-outline:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.ui-btn-secondary {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.06);
+}
+
+.ui-btn-secondary:hover {
+  background: color-mix(in oklab, var(--secondary) 80%, transparent);
+}
+
+.ui-btn-ghost {
+  background: transparent;
+  color: var(--foreground, var(--ink));
+}
+
+.ui-btn-ghost:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.ui-btn-link {
+  background: transparent;
+  color: var(--primary);
+  text-underline-offset: 4px;
+}
+
+.ui-btn-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Sizes ────────────────────────────────────────────────── */
+
+.ui-btn-size-default {
+  height: 36px;
+  padding: 8px 16px;
+}
+
+.ui-btn-size-sm {
+  height: 32px;
+  padding: 6px 12px;
+  gap: 6px;
+  border-radius: var(--radius-md, 10px);
+}
+
+.ui-btn-size-sm svg {
+  width: 15px;
+  height: 15px;
+}
+
+.ui-btn-size-lg {
+  height: 40px;
+  padding: 8px 24px;
+}
+
+.ui-btn-size-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}

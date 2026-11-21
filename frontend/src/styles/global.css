@@ -54,9 +54,9 @@
   --ring: oklch(0.45 0.09 195);
 
   /* Fonts */
-  --font-sans: "DM Sans", sans-serif;
-  --font-serif: "Fraunces", Georgia, serif;
-  --font-mono: "Geist Mono", monospace;
+    --font-sans: "Segoe UI", system-ui, Arial, sans-serif;
+--font-serif: "Segoe UI", system-ui, Arial, sans-serif;
+--font-mono: "Consolas", monospace; 
 }
 
 

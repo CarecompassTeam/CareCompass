@@ -12,6 +12,9 @@ The frontend contains the user interface, pages, reusable components, hooks, uti
 - `src/hooks/` — Reusable React hooks.
 - `src/utils/` — Shared frontend utilities.
 - `src/App.jsx` — Main application component.
+  ## Patient Dashboard
+  
+`src/components/patient/`: `PatientWorkspace` (sidebar + topbar), `MedicalHistoryForm`, `FindDoctor`, `MyVisits`, `MyRecords`. Shown in `App.jsx` after patient sign-in, using mock data.
 
 ## Getting Started
 

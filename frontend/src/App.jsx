@@ -5,6 +5,7 @@ import SiteFooter from "./components/home/SiteFooter";
 import { SignInDialog } from "./components/auth/SignInDialog";
 import { SignUpDialog } from "./components/auth/SignUpDialog";
 import { DoctorWorkspace } from "./components/doctor/DoctorWorkspace";
+import { PatientWorkspace } from "./components/patient/PatientWorkspace";
 import { Toaster } from "./components/ui/Toaster";
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
   const [signInOpen, setSignInOpen] = useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);
   const [doctorSession, setDoctorSession] = useState(null);
+  const [patientSession, setPatientSession] = useState(null);
 
   const handleDoctorSignIn = (email, name) => {
     setSignInOpen(false);
@@ -19,7 +21,8 @@ export default function App() {
   };
 
   const handlePatientSignIn = (email, name) => {
-    console.log("Patient signed in:", email, name);
+    setSignInOpen(false);
+    setPatientSession({ email, name });
   };
 
   useEffect(() => {
@@ -40,6 +43,18 @@ export default function App() {
         setApiStatus("Not connected");
       });
   }, []);
+
+  if (patientSession) {
+    return (
+      <>
+        <PatientWorkspace
+          patient={{ name: patientSession.name, email: patientSession.email }}
+          onSignOut={() => setPatientSession(null)}
+        />
+        <Toaster />
+      </>
+    );
+  }
 
   if (doctorSession) {
     return (
