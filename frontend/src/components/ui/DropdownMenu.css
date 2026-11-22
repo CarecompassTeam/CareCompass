@@ -1,0 +1,100 @@
+/* =====================================
+   DropdownMenu — plain-CSS port of shadcn/ui DropdownMenu
+   Values mirror the workspace dropdown-menu.tsx (New York style)
+===================================== */
+
+.ui-dd {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Popover panel — bg-popover rounded-md border shadow-md, min-w-32 (8rem) */
+.ui-dd-content {
+  position: absolute;
+  z-index: 60;
+  min-width: 128px;
+  overflow: hidden;
+
+  background: var(--popover, #ffffff);
+  color: var(--popover-foreground, var(--ink));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 10px);
+  box-shadow: 0 10px 30px rgba(18, 41, 44, 0.16);
+  padding: 4px;
+
+  animation: ui-dd-in 0.14s ease;
+}
+
+/* align="end" — panel right edge matches the trigger */
+.ui-dd-content[data-align="end"] {
+  left: auto;
+  right: 0;
+}
+
+.ui-dd-content[data-align="start"] {
+  left: 0;
+  right: auto;
+}
+
+.ui-dd-content[data-align="center"] {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+@keyframes ui-dd-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Item — focus styles: bg-accent text-accent-foreground, px-2 py-1.5 text-sm */
+.ui-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 8px;
+  border-radius: 6px;
+
+  font-size: 13px;
+  line-height: 1.25;
+  color: var(--foreground, var(--ink));
+
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.ui-dd-item:hover,
+.ui-dd-item:focus-visible {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.ui-dd-item[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Label — px-2 py-1.5 text-sm font-medium */
+.ui-dd-label {
+  padding: 6px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground, var(--ink));
+}
+
+/* Separator — -mx-1 my-1 h-px bg-muted */
+.ui-dd-separator {
+  height: 1px;
+  margin: 4px -4px;
+  background: var(--muted);
+}

@@ -1,0 +1,574 @@
+/* ==========================================================================
+   AdminAudit — activity log section (filters, table, pagination).
+   Converted from Tailwind utility classes to plain CSS. Prefix: aa-
+   ========================================================================== */
+
+/* ── Shared icon sizes & animations ────────────────────────────────────── */
+.aa-icon-14 {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.aa-icon-16 {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.aa-icon-24 {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.aa-spin {
+  animation: aa-spin 1s linear infinite;
+}
+
+@keyframes aa-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Root — px-4 py-6 sm:px-6 lg:py-8 ─────────────────────────────────── */
+.aa-root {
+  padding: 24px 16px;
+}
+
+@media (min-width: 640px) {
+  .aa-root {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .aa-root {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+}
+
+/* ── Section header ───────────────────────────────────────────────────────
+   mb-6 flex flex-wrap items-end justify-between gap-4 */
+.aa-header {
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.aa-eyebrow {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.33;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--primary);
+}
+
+.aa-title {
+  margin: 4px 0 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 24px;
+  line-height: 1.33;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.aa-sub {
+  margin: 4px 0 0;
+  max-width: 576px;
+  font-size: 14px;
+  line-height: 1.43;
+  color: var(--muted-foreground);
+  text-wrap: pretty;
+}
+
+/* refresh — inline-flex h-9 items-center gap-1.5 rounded-lg border
+   bg-card px-3 text-xs font-medium hover:bg-accent */
+.aa-refresh-btn {
+  display: inline-flex;
+  height: 36px;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.33;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.aa-refresh-btn:hover {
+  background: var(--accent);
+  color: var(--foreground, var(--ink));
+}
+
+/* ── Filters card ─────────────────────────────────────────────────────────
+   mb-4 rounded-2xl border bg-card p-4 shadow-sm */
+.aa-filters {
+  margin-bottom: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.05);
+}
+
+/* flex flex-wrap items-end gap-3 */
+.aa-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* filters label — mb-2 text-[11px] font-semibold uppercase tracking-wide
+   sm:mb-0 */
+.aa-filters-label {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--muted-foreground);
+}
+
+@media (min-width: 640px) {
+  .aa-filters-label {
+    margin-bottom: 0;
+  }
+}
+
+/* action select — h-9 w-full bg-background sm:w-48 */
+.ui-select-trigger.aa-select-action {
+  height: 36px;
+  width: 100%;
+  background: var(--background);
+}
+
+@media (min-width: 640px) {
+  .ui-select-trigger.aa-select-action {
+    width: 192px;
+  }
+}
+
+/* user select — h-9 w-full bg-background sm:w-52 */
+.ui-select-trigger.aa-select-user {
+  height: 36px;
+  width: 100%;
+  background: var(--background);
+}
+
+@media (min-width: 640px) {
+  .ui-select-trigger.aa-select-user {
+    width: 208px;
+  }
+}
+
+/* longer dropdown lists — max-h-72 */
+.ui-select-content.aa-select-content {
+  max-height: 288px;
+}
+
+/* mono items — font-mono text-xs */
+.ui-select-item.aa-select-item {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+}
+
+/* date labels — mb-1 block text-[10px] font-medium uppercase tracking-wide */
+.aa-date-label {
+  margin-bottom: 4px;
+  display: block;
+  font-size: 10px;
+  line-height: 1.45;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--muted-foreground);
+}
+
+/* date inputs — h-9 w-40 bg-background text-xs */
+.ui-input.aa-date-input {
+  height: 36px;
+  width: 160px;
+  background: var(--background);
+  font-size: 12px;
+}
+
+/* clear filters — h-9 ghost muted */
+.ui-btn.aa-btn-clear {
+  height: 36px;
+  color: var(--muted-foreground);
+}
+
+/* ── Table card ─────────────────────────────────────────────────────────── */
+.aa-card {
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.05);
+}
+
+/* horizontal scroll — overflow-x-auto */
+.aa-scroll {
+  overflow-x: auto;
+}
+
+/* header row — hover:bg-transparent */
+.ui-table-row.aa-tr-head:hover {
+  background: transparent;
+}
+
+/* head cells — text-[11px] font-semibold uppercase tracking-wide
+   text-muted-foreground */
+.ui-table-head.aa-th {
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--muted-foreground);
+}
+
+/* Resource column — hidden md:table-cell */
+.ui-table-head.aa-col-resource,
+.ui-table-cell.aa-cell-resource {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .ui-table-head.aa-col-resource,
+  .ui-table-cell.aa-cell-resource {
+    display: table-cell;
+  }
+}
+
+/* Detail column — hidden lg:table-cell */
+.ui-table-head.aa-col-detail,
+.ui-table-cell.aa-cell-detail {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .ui-table-head.aa-col-detail,
+  .ui-table-cell.aa-cell-detail {
+    display: table-cell;
+  }
+}
+
+/* ── Body cells ─────────────────────────────────────────────────────────── */
+
+/* time — whitespace-nowrap text-xs text-muted-foreground */
+.ui-table-cell.aa-cell-time {
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+/* actor — max-w-48 truncate font-mono text-xs text-foreground */
+.ui-table-cell.aa-cell-actor {
+  max-width: 192px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--foreground, var(--ink));
+}
+
+/* role chip — rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize */
+.aa-role-chip {
+  border-radius: 9999px;
+  padding: 2px 8px;
+  font-size: 10px;
+  line-height: 1.45;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.aa-role-doctor {
+  background: var(--teal-soft);
+  color: var(--primary);
+}
+
+.aa-role-patient {
+  background: oklch(0.92 0.05 150);
+  color: var(--sage);
+}
+
+.aa-role-admin {
+  background: oklch(0.95 0.05 60);
+  color: var(--clay);
+}
+
+.aa-role-default {
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+
+/* action — whitespace-nowrap font-mono text-xs font-medium text-ink */
+.ui-table-cell.aa-cell-action {
+  white-space: nowrap;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* resource — max-w-52 truncate font-mono text-xs text-muted-foreground */
+.ui-table-cell.aa-cell-resource {
+  max-width: 208px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+/* result chip — inline-flex items-center gap-1.5 rounded-full px-2.5 py-1
+   text-[10px] font-semibold */
+.aa-result-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 10px;
+  line-height: 1.45;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.aa-result-success {
+  background: color-mix(in oklab, var(--sage) 10%, transparent);
+  color: var(--sage);
+}
+
+.aa-result-denied {
+  background: color-mix(in oklab, var(--clay) 15%, transparent);
+  color: var(--clay);
+}
+
+.aa-result-error {
+  background: color-mix(in oklab, var(--destructive) 10%, transparent);
+  color: var(--destructive);
+}
+
+.aa-result-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* detail — max-w-64 truncate text-xs text-muted-foreground */
+.ui-table-cell.aa-cell-detail {
+  max-width: 256px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+/* ── Skeleton ─────────────────────────────────────────────────────────────
+   space-y-3 p-5 */
+.aa-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+.aa-sk-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.aa-sk-time {
+  height: 14px;
+  width: 176px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: var(--accent);
+  animation: aa-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.aa-sk-line {
+  height: 14px;
+  flex: 1;
+  border-radius: 4px;
+  background: var(--accent);
+  animation: aa-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.aa-sk-chip {
+  height: 20px;
+  width: 64px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: var(--accent);
+  animation: aa-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes aa-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ── Error row ────────────────────────────────────────────────────────────
+   flex items-center justify-between gap-3 px-5 py-4 text-sm */
+.aa-error-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  font-size: 14px;
+  line-height: 1.43;
+}
+
+.aa-error-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--destructive);
+}
+
+.aa-error-text svg {
+  flex-shrink: 0;
+}
+
+/* ── Empty state ────────────────────────────────────────────────────────── */
+.aa-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px;
+  text-align: center;
+}
+
+.aa-empty-icon {
+  display: flex;
+  height: 56px;
+  width: 56px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: var(--teal-soft);
+}
+
+.aa-empty-title {
+  margin: 16px 0 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.aa-empty-text {
+  margin: 4px 0 0;
+  max-width: 384px;
+  font-size: 14px;
+  line-height: 1.43;
+  color: var(--muted-foreground);
+}
+
+/* ── Pagination ───────────────────────────────────────────────────────────
+   flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3 */
+.aa-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+}
+
+.aa-page-info {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.33;
+  color: var(--muted-foreground);
+}
+
+.aa-strong {
+  font-weight: 600;
+  color: var(--foreground, var(--ink));
+}
+
+/* flex items-center gap-2 */
+.aa-pager {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* pager buttons — h-8 outline */
+.ui-btn.aa-btn-page {
+  height: 32px;
+}
+
+.aa-page-icon-l {
+  margin-right: 4px;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.aa-page-icon-r {
+  margin-left: 4px;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.aa-page-text {
+  font-size: 12px;
+  line-height: 1.33;
+  color: var(--muted-foreground);
+}
+
+/* ── Footnote ─────────────────────────────────────────────────────────────
+   mt-3 flex items-start gap-1.5 text-[11px] text-muted-foreground */
+.aa-footnote {
+  margin: 12px 0 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+.aa-footnote-icon {
+  margin-top: 2px;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--primary);
+}

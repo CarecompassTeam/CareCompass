@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { LogOut, ShieldAlert } from "lucide-react";
 
 import Navbar from "./components/home/Navbar";
 import Hero from "./components/home/Hero";
@@ -12,6 +11,7 @@ import { SignInDialog } from "./components/auth/SignInDialog";
 import { SignUpDialog } from "./components/auth/SignUpDialog";
 import { DoctorWorkspace } from "./components/doctor/DoctorWorkspace";
 import { PatientWorkspace } from "./components/patient/PatientWorkspace";
+import { AdminWorkspace } from "./components/admin/AdminWorkspace";
 import { Toaster } from "./components/ui/Toaster";
 import { AuthProvider, useAuth, RequireAuth } from "./hooks/use-auth";
 
@@ -88,7 +88,13 @@ function AppShell() {
     return (
       <>
         <RequireAuth role="admin">
-          <AdminPlaceholder onSignOut={logout} />
+          <AdminWorkspace
+            admin={{
+              name: user.name,
+              email: user.email,
+            }}
+            onSignOut={logout}
+          />
         </RequireAuth>
         <Toaster />
       </>
@@ -135,23 +141,3 @@ function AppShell() {
   );
 }
 
-/* Admin dashboard is not in this sprint — keep the session clean. */
-function AdminPlaceholder({ onSignOut }) {
-  return (
-    <div className="auth-guard-card">
-      <span className="auth-guard-icon denied">
-        <ShieldAlert size={22} />
-      </span>
-      <h2>Admin area</h2>
-      <p>
-        You are signed in as admin. The admin verification dashboard is not
-        part of this frontend build yet.
-      </p>
-
-      <button type="button" className="patient-slot-logout" onClick={onSignOut}>
-        <LogOut size={15} />
-        Sign out
-      </button>
-    </div>
-  );
-}

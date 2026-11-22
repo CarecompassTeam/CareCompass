@@ -1,0 +1,110 @@
+/* ==========================================================================
+   VerificationUI — status chips & document glyphs for the admin queue.
+   Converted from Tailwind utility classes to plain CSS. Prefix: vu-
+   ========================================================================== */
+
+/* ── Icon sizes ─────────────────────────────────────────────────────── */
+.vu-icon-12 {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.vu-icon-20 {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* ── Application status chip ───────────────────────────────────────────
+   inline-flex items-center gap-1.5 rounded-full px-2.5 py-1
+   text-[11px] font-semibold */
+.vu-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Doc status chip — slightly tighter (px-2 py-0.5 text-[10px]) */
+.vu-chip-doc {
+  padding: 2px 8px;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+/* ── Status tones ──────────────────────────────────────────────────── */
+.vu-tone-pending {
+  background: var(--accent);
+  color: var(--muted-foreground);
+}
+
+.vu-tone-review {
+  background: oklch(0.95 0.05 60);
+  color: var(--clay);
+}
+
+.vu-tone-verified {
+  background: var(--teal-soft);
+  color: var(--primary);
+}
+
+.vu-tone-rejected {
+  background: color-mix(in oklab, var(--destructive) 10%, transparent);
+  color: var(--destructive);
+}
+
+/* ── Checklist item (password rules) ──────────────────────────────────
+   flex items-center gap-1.5 text-xs */
+.vu-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.33;
+  color: var(--muted-foreground);
+  transition: color 0.15s ease;
+}
+
+.vu-check-pass {
+  color: var(--sage);
+}
+
+/* ── Document glyph ─────────────────────────────────────────────────── */
+.vu-glyph-img {
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.vu-glyph-fallback {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: oklch(0.95 0.04 60);
+  color: var(--clay);
+}
+
+/* ── File meta chip (PDF/Image · size) ────────────────────────────────
+   inline-flex items-center gap-1 text-[11px] text-muted-foreground */
+.vu-filechip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+.vu-filechip svg {
+  flex-shrink: 0;
+}

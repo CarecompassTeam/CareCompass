@@ -1,0 +1,62 @@
+/* =====================================
+   Checkbox — plain-CSS port of shadcn/ui Checkbox
+   Values mirror the workspace checkbox.tsx (New York style)
+===================================== */
+
+.ui-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.ui-checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.ui-checkbox:focus-visible .ui-checkbox-box {
+  border-color: var(--ring, var(--primary));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring, var(--primary)) 50%, transparent);
+}
+
+/* The square (peer of the check glyph) */
+.ui-checkbox-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+
+  background: transparent;
+  border: 1px solid var(--border, #dde7e5);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.05);
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* Checked — primary fill, white glyph (shadcn data-[state=checked]) */
+.ui-checkbox[aria-checked="true"] .ui-checkbox-box,
+.ui-checkbox[aria-checked="mixed"] .ui-checkbox-box {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.ui-checkbox-glyph {
+  width: 12px;
+  height: 12px;
+  color: currentColor;
+  pointer-events: none;
+}

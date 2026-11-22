@@ -1,0 +1,940 @@
+/* ==========================================================================
+   AdminUsers — user management section (table, filters, dialogs).
+   Converted from Tailwind utility classes to plain CSS. Prefix: au-
+   ========================================================================== */
+
+/* ── Shared icon sizes & animations ────────────────────────────────────── */
+.au-icon-14 {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.au-icon-16 {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.au-icon-24 {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.au-spin {
+  animation: au-spin 1s linear infinite;
+}
+
+@keyframes au-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.au-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.au-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Root — px-4 py-6 sm:px-6 lg:py-8 ─────────────────────────────────── */
+.au-root {
+  padding: 24px 16px;
+}
+
+@media (min-width: 640px) {
+  .au-root {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .au-root {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+}
+
+/* ── Section header ───────────────────────────────────────────────────────
+   mb-6 flex flex-wrap items-end justify-between gap-4 */
+.au-header {
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* eyebrow — text-xs font-semibold uppercase tracking-[0.18em] text-primary */
+.au-eyebrow {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.33;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--primary);
+}
+
+/* title — mt-1 font-serif text-2xl font-semibold tracking-tight text-ink */
+.au-title {
+  margin: 4px 0 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 24px;
+  line-height: 1.33;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+/* sub — mt-1 max-w-xl text-sm text-muted-foreground text-pretty */
+.au-sub {
+  margin: 4px 0 0;
+  max-width: 576px;
+  font-size: 14px;
+  line-height: 1.43;
+  color: var(--muted-foreground);
+  text-wrap: pretty;
+}
+
+/* flex items-center gap-2 */
+.au-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* refresh — inline-flex h-9 items-center gap-1.5 rounded-lg border
+   bg-card px-3 text-xs font-medium hover:bg-accent */
+.au-refresh-btn {
+  display: inline-flex;
+  height: 36px;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.33;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.au-refresh-btn:hover {
+  background: var(--accent);
+  color: var(--foreground, var(--ink));
+}
+
+/* New user — h-9 bg-primary */
+.ui-btn.au-btn-new {
+  height: 36px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.ui-btn.au-btn-new:hover {
+  background: color-mix(in oklab, var(--primary) 90%, transparent);
+}
+
+/* Icon inside a Button (mr-2 h-4 w-4) */
+.au-btn-icon {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Toolbar ──────────────────────────────────────────────────────────────
+   mb-4 flex flex-col gap-3 sm:flex-row sm:items-center */
+.au-toolbar {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .au-toolbar {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+/* relative flex-1 sm:max-w-xs */
+.au-search-wrap {
+  position: relative;
+  flex: 1;
+}
+
+@media (min-width: 640px) {
+  .au-search-wrap {
+    max-width: 320px;
+  }
+}
+
+/* search icon — pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 */
+.au-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  color: var(--muted-foreground);
+}
+
+/* search input — h-10 bg-card pl-9 */
+.ui-input.au-search-input {
+  height: 40px;
+  background: var(--card);
+  padding-left: 36px;
+}
+
+/* select triggers — h-10 w-full bg-card sm:w-40 */
+.ui-select-trigger.au-select-role,
+.ui-select-trigger.au-select-status {
+  height: 40px;
+  width: 100%;
+  background: var(--card);
+}
+
+@media (min-width: 640px) {
+  .ui-select-trigger.au-select-role,
+  .ui-select-trigger.au-select-status {
+    width: 160px;
+  }
+}
+
+/* count — text-xs text-muted-foreground sm:ml-auto */
+.au-count {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.33;
+  color: var(--muted-foreground);
+}
+
+@media (min-width: 640px) {
+  .au-count {
+    margin-left: auto;
+  }
+}
+
+/* ── Table card ───────────────────────────────────────────────────────────
+   overflow-hidden rounded-2xl border bg-card shadow-sm */
+.au-card {
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.05);
+}
+
+/* error row — flex items-center justify-between gap-3 px-5 py-4 text-sm */
+.au-error-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  font-size: 14px;
+  line-height: 1.43;
+}
+
+.au-error-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--destructive);
+}
+
+.au-error-text svg {
+  flex-shrink: 0;
+}
+
+/* scroll area — max-h-[62vh] overflow-y-auto */
+.au-scroll {
+  max-height: 62vh;
+  overflow-y: auto;
+}
+
+/* sticky header — sticky top-0 z-10 bg-card */
+.ui-table-header.au-thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--card);
+}
+
+/* header row — hover:bg-transparent */
+.ui-table-row.au-tr-head:hover {
+  background: transparent;
+}
+
+/* head cells — text-[11px] font-semibold uppercase tracking-wide
+   text-muted-foreground */
+.ui-table-head.au-th {
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--muted-foreground);
+}
+
+/* Source column — hidden md:table-cell */
+.ui-table-head.au-th-source,
+.ui-table-cell.au-cell-source {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .ui-table-head.au-th-source,
+  .ui-table-cell.au-cell-source {
+    display: table-cell;
+  }
+}
+
+/* Created column — hidden lg:table-cell */
+.ui-table-head.au-th-created,
+.ui-table-cell.au-cell-created {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .ui-table-head.au-th-created,
+  .ui-table-cell.au-cell-created {
+    display: table-cell;
+  }
+}
+
+/* actions head — w-12 text-right */
+.ui-table-head.au-th-actions {
+  width: 48px;
+  text-align: right;
+}
+
+/* body rows — border-border (colour comes from base) */
+.ui-table-row.au-tr-disabled {
+  opacity: 0.6;
+}
+
+/* user cell — py-3 */
+.ui-table-cell.au-cell-user {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+/* flex items-center gap-3 */
+.au-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* avatar — flex h-9 w-9 shrink-0 items-center justify-center
+   rounded-xl bg-teal-soft text-xs font-semibold text-primary */
+.au-avatar {
+  display: flex;
+  height: 36px;
+  width: 36px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--teal-soft);
+  font-size: 12px;
+  line-height: 1.33;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* min-w-0 */
+.au-user-main {
+  min-width: 0;
+}
+
+/* name line — flex items-center gap-1.5 text-sm font-semibold text-ink */
+.au-user-name {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.43;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* You chip — rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px]
+   font-bold uppercase text-primary */
+.au-you-chip {
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  padding: 2px 6px;
+  font-size: 9px;
+  line-height: 1.45;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+/* email — truncate font-mono text-[11px] text-muted-foreground */
+.au-user-email {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+/* ── Role chip ────────────────────────────────────────────────────────────
+   inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px]
+   font-semibold */
+.au-role-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.au-role-chip svg {
+  flex-shrink: 0;
+}
+
+.au-role-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.au-role-doctor {
+  background: var(--teal-soft);
+  color: var(--primary);
+}
+
+.au-role-patient {
+  background: oklch(0.92 0.05 150);
+  color: var(--sage);
+}
+
+.au-role-admin {
+  background: oklch(0.95 0.05 60);
+  color: var(--clay);
+}
+
+/* ── Status chip ────────────────────────────────────────────────────────── */
+.au-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.au-status-active {
+  background: color-mix(in oklab, var(--sage) 10%, transparent);
+  color: var(--sage);
+}
+
+.au-status-disabled {
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.au-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.au-status-dot-active {
+  background: var(--sage);
+}
+
+.au-status-dot-off {
+  background: var(--muted-foreground);
+}
+
+/* source cell — max-w-48 truncate text-xs text-muted-foreground */
+.ui-table-cell.au-cell-source {
+  max-width: 192px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+/* created cell — text-xs text-muted-foreground */
+.ui-table-cell.au-cell-created {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+/* actions cell — text-right */
+.ui-table-cell.au-cell-actions {
+  text-align: right;
+}
+
+/* kebab — inline-flex h-8 w-8 items-center justify-center rounded-lg */
+.au-kebab {
+  display: inline-flex;
+  height: 32px;
+  width: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  padding: 0;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.au-kebab:hover {
+  background: var(--accent);
+  color: var(--foreground, var(--ink));
+}
+
+/* dropdown — w-56 */
+.ui-dd-content.au-dd {
+  width: 224px;
+}
+
+/* dropdown label — text-[11px] text-muted-foreground */
+.ui-dd-label.au-dd-label {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+/* item icons — mr-2 h-4 w-4 text-muted-foreground */
+.au-dd-icon {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+
+.au-dd-icon-sage {
+  color: var(--sage);
+}
+
+/* item hint — ml-auto text-[10px] text-muted-foreground */
+.au-dd-hint {
+  margin-left: auto;
+  font-size: 10px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+/* destructive item — text-destructive focus:text-destructive */
+.ui-dd-item.au-dd-danger {
+  color: var(--destructive);
+}
+
+.ui-dd-item.au-dd-danger:hover,
+.ui-dd-item.au-dd-danger:focus-visible {
+  background: var(--accent);
+  color: var(--destructive);
+}
+
+/* ── Footnote ─────────────────────────────────────────────────────────────
+   mt-3 flex items-start gap-1.5 text-[11px] text-muted-foreground */
+.au-footnote {
+  margin: 12px 0 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+.au-footnote-icon {
+  margin-top: 2px;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+/* ── Skeleton ─────────────────────────────────────────────────────────────
+   space-y-3 p-5 */
+.au-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+/* flex items-center gap-3 */
+.au-sk-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.au-sk-avatar {
+  height: 36px;
+  width: 36px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  animation: au-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.au-sk-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.au-sk-line {
+  display: block;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--accent);
+  animation: au-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.au-sk-line-short {
+  display: block;
+  height: 12px;
+  width: 33.333%;
+  border-radius: 4px;
+  background: var(--accent);
+  animation: au-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.au-sk-chip {
+  height: 24px;
+  width: 80px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: var(--accent);
+  animation: au-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.au-sk-chip-sm {
+  width: 64px;
+}
+
+@keyframes au-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────────
+   flex flex-col items-center justify-center px-6 py-14 text-center */
+.au-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px;
+  text-align: center;
+}
+
+.au-empty-icon {
+  display: flex;
+  height: 56px;
+  width: 56px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: var(--teal-soft);
+}
+
+.au-empty-title {
+  margin: 16px 0 0;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.au-empty-text {
+  margin: 4px 0 0;
+  max-width: 384px;
+  font-size: 14px;
+  line-height: 1.43;
+  color: var(--muted-foreground);
+}
+
+/* ── Dialogs ──────────────────────────────────────────────────────────────
+   DialogContent max-w-md bg-background */
+.ui-dialog-content.au-dialog {
+  max-width: 448px;
+  background: var(--background);
+}
+
+/* serif dialog title — font-serif text-xl text-ink */
+.ui-dialog-title.au-dialog-title {
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+/* form — space-y-4 */
+.au-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* field — space-y-1.5 */
+.au-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* label — text-sm font-medium text-ink */
+.ui-label.au-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* field error — flex items-center gap-1 text-xs text-destructive */
+.au-field-error {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 1.33;
+  color: var(--destructive);
+}
+
+.au-error-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* role select — h-10 bg-card */
+.ui-select-trigger.au-select-full {
+  height: 40px;
+  background: var(--card);
+}
+
+/* password — relative wrapper + pr-10 input + absolute toggle */
+.au-pw-wrap {
+  position: relative;
+}
+
+.ui-input.au-pw-input {
+  height: 40px;
+  padding-right: 40px;
+}
+
+.au-pw-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  padding: 6px;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.au-pw-toggle:hover {
+  background: var(--accent);
+  color: var(--foreground, var(--ink));
+}
+
+/* password rules — grid grid-cols-2 gap-x-3 gap-y-1 pt-0.5 */
+.au-rules {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 12px;
+  row-gap: 4px;
+}
+
+/* rule row — flex items-center gap-1.5 text-[11px] */
+.au-rule {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+.au-rule-pass {
+  color: var(--sage);
+}
+
+.au-rule-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.au-rule-circle {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+}
+
+/* form error — rounded-xl border-destructive/30 bg-destructive/5 px-3.5 py-3 */
+.au-form-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in oklab, var(--destructive) 30%, transparent);
+  background: color-mix(in oklab, var(--destructive) 5%, transparent);
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.625;
+  color: var(--destructive);
+}
+
+.au-form-error p {
+  margin: 0;
+}
+
+.au-form-error-icon {
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* form actions — flex flex-col gap-2 pt-1 sm:flex-row-reverse */
+.au-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+@media (min-width: 640px) {
+  .au-form-actions {
+    flex-direction: row-reverse;
+  }
+}
+
+/* submit — h-10 flex-1 primary */
+.ui-btn.au-btn-submit {
+  height: 40px;
+  flex: 1;
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.ui-btn.au-btn-submit:hover {
+  background: color-mix(in oklab, var(--primary) 90%, transparent);
+}
+
+/* cancel — h-10 outline */
+.ui-btn.au-btn-cancel {
+  height: 40px;
+}
+
+/* role change warning — rounded-xl border-clay/30 bg-[oklch(0.96_0.04_75)] */
+.au-role-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in oklab, var(--clay) 30%, transparent);
+  background: oklch(0.96 0.04 75);
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.33;
+}
+
+.au-role-warning p {
+  margin: 0;
+  line-height: 1.625;
+  color: var(--foreground, var(--ink));
+}
+
+.au-role-warning-icon {
+  margin-top: 2px;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--clay);
+}
+
+/* ── AlertDialog action overrides ─────────────────────────────────────────
+   bg-destructive / bg-primary variants */
+.ui-alert-btn-action.au-alert-danger {
+  background: var(--destructive);
+  color: var(--primary-foreground);
+}
+
+.ui-alert-btn-action.au-alert-danger:hover {
+  background: color-mix(in oklab, var(--destructive) 90%, transparent);
+}
+
+.ui-alert-btn-action.au-alert-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* serif title — font-serif text-xl text-ink */
+.ui-alert-title.au-dialog-title {
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+/* leading-relaxed description */
+.ui-alert-description.au-dialog-desc {
+  line-height: 1.625;
+}

@@ -1,0 +1,60 @@
+/* =====================================
+   Table — plain-CSS port of shadcn/ui Table
+   Values mirror the workspace table.tsx (New York style)
+===================================== */
+
+.ui-table-container {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.ui-table {
+  width: 100%;
+  caption-side: bottom;
+  font-size: 13px;
+  border-collapse: collapse;
+}
+
+/* Header / footer rows keep their bottom rule even when nested in
+   extra markup (parity with shadcn's [&>tr]:border-b) */
+.ui-table-header > tr,
+.ui-table-header > .ui-table-row {
+  border-bottom: 1px solid var(--border);
+}
+
+.ui-table-body > tr,
+.ui-table-body > .ui-table-row {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s ease;
+}
+
+.ui-table-body > tr:last-child,
+.ui-table-body > .ui-table-row:last-child {
+  border-bottom: 0;
+}
+
+.ui-table-row:hover {
+  background: color-mix(in oklab, var(--muted) 50%, transparent);
+}
+
+.ui-table-head {
+  height: 40px;
+  padding: 0 8px;
+
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 500;
+  color: var(--foreground, var(--ink));
+  white-space: nowrap;
+}
+
+.ui-table-cell {
+  padding: 8px;
+
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Row/cell base borders come from the body rules above; passing a
+   border-color utility class on <tr> still wins via specificity. */

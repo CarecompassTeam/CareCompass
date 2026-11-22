@@ -1,0 +1,64 @@
+/* =====================================
+   Input — plain-CSS port of shadcn/ui Input
+   Values mirror the workspace input.tsx (New York style)
+===================================== */
+
+.ui-input {
+  display: flex;
+  height: 36px;
+  width: 100%;
+  min-width: 0;
+
+  padding: 4px 12px;
+
+  background: transparent;
+  border: 1px solid var(--input, var(--border));
+  border-radius: var(--radius-md, 10px);
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.05);
+
+  color: var(--foreground, var(--ink));
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.25;
+
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    color 0.15s ease;
+}
+
+.ui-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.ui-input:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.ui-input:focus-visible {
+  border-color: var(--ring, var(--primary));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring, var(--primary)) 50%, transparent);
+}
+
+/* Error state (matches focus-visible:ring-destructive overrides) */
+.ui-input.ui-input-invalid {
+  border-color: var(--destructive);
+}
+
+.ui-input.ui-input-invalid:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--destructive) 30%, transparent);
+}
+
+/* Search inputs — hide the native clear button for the styled look */
+.ui-input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ui-input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}

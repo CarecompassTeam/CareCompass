@@ -1,0 +1,47 @@
+/* =====================================
+   Textarea — plain-CSS port of shadcn/ui Textarea
+   Values mirror the workspace textarea.tsx (New York style)
+===================================== */
+
+.ui-textarea {
+  display: flex;
+  width: 100%;
+  min-height: 64px;
+
+  padding: 8px 12px;
+
+  background: transparent;
+  border: 1px solid var(--input, var(--border));
+  border-radius: var(--radius-md, 10px);
+  box-shadow: 0 1px 2px rgba(18, 41, 44, 0.05);
+
+  color: var(--foreground, var(--ink));
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.45;
+
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    color 0.15s ease;
+}
+
+.ui-textarea::placeholder {
+  color: var(--muted-foreground);
+}
+
+.ui-textarea:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.ui-textarea:focus-visible {
+  border-color: var(--ring, var(--primary));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring, var(--primary)) 50%, transparent);
+}
+
+.ui-textarea textarea {
+  resize: vertical;
+}

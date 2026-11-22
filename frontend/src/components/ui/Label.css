@@ -1,0 +1,23 @@
+/* =====================================
+   Label — plain-CSS port of shadcn/ui Label
+===================================== */
+
+.ui-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--foreground, var(--ink));
+
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Disabled fieldset support (parity with shadcn) */
+.ui-label:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
