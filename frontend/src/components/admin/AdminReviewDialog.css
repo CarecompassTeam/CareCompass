@@ -194,12 +194,17 @@
 }
 
 /* ── List ─────────────────────────────────────────────────────────────────
-   flex-1 space-y-3 overflow-y-auto px-6 py-5 sm:px-8 */
+   flex-1 space-y-3 overflow-y-auto px-6 py-5 sm:px-8
+
+   NOTE: the original workspace uses Tailwind `space-y-3` on a plain BLOCK
+   container — NOT a flex column. If this container is display:flex with a
+   max-height, flex-shrink squeezes the cards (they have overflow:hidden,
+   so their automatic minimum size is 0) instead of letting the list scroll:
+   expanded cards get clipped mid-preview and the Approve/Reject buttons
+   disappear. Keep it block + margin-top on subsequent cards, exactly like
+   the workspace. */
 .av-queue-list {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
   overflow-y: auto;
   padding: 20px 24px;
 }
@@ -216,6 +221,11 @@
   max-height: 62vh;
   min-height: 320px;
   background: var(--background);
+}
+
+/* space-y-3 — vertical gap between application cards */
+.av-card + .av-card {
+  margin-top: 12px;
 }
 
 /* Loading applications — flex items-center justify-center py-14 */
@@ -301,8 +311,13 @@
 }
 
 /* ── Application card ─────────────────────────────────────────────────────
-   overflow-hidden rounded-2xl border bg-card shadow-sm */
+   overflow-hidden rounded-2xl border bg-card shadow-sm
+
+   flex-shrink: 0 keeps every card at its natural height even inside a
+   constrained flex container — content must never be squeezed/clipped;
+   the list itself scrolls instead. */
 .av-card {
+  flex-shrink: 0;
   overflow: hidden;
   border-radius: 16px;
   border: 1px solid var(--border);
